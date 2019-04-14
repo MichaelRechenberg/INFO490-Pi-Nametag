@@ -1,17 +1,70 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Nametag Home page</title>
+		<title>Nametag Home Page</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+		<script>
+			function activateLED(){
+				var command = document.getElementById("command-prompt").value;
+				var duration = document.getElementById("duration-prompt").value;
+				duration = Number(duration);
+
+
+				var payload = {
+				    "led_key": command,
+				    "duration": duration
+				};
+
+
+
+				var statusIndicator = document.getElementById("led-command-status");
+				statusIndicator.innerHTML = "Command is Executing"
+
+
+				// Send AJAX request	
+				$.ajax({
+				    method: "POST",
+				    url: "activateLED",
+				    contentType: "application/json",
+			            data: JSON.stringify(payload),
+				    crossDomain: true
+				}).done( function (data, status) {
+					     //do whatever you want with the return data upon successful return
+					console.log("Successfully sent LED activation request");
+					statusIndicator.innerHTML = "Command Executed Successfully!";
+		                  })
+			          .fail( function (data, status) {
+					      //do whatever you want with the return data upon error
+					console.log(data);
+					console.log(status);
+					statusIndicator.innerHTML = "Invalid Command!";
+		                });
+			}
+		</script>
 	</head>
 
 	<body>
 		<h1>Nametag Webserver</h1>
 		<p>Hello, this is the webserver attached to my nametag</p>
-		<p>If you want to interact with my nametag remotely, you can do the following things</p>
-		<p><font color="red">TODO: list API routes and HTTP verbs</font></p>
+		<p>If you want to interact with my nametag remotely, you type the following commands into the text box</p>
 		<ul>
-			<li>foo/bar/baz</li>
-			<li>derp/hello</li>
-		<ul>
+			<li>whoami</li>
+			<li>ls -l /home/mike/work</li>
+			<li>sudo rm -rf /bad/vibes</li>
+		</ul>
+
+		<br></br>
+		<div id="led_interface">
+			<h2>LED Interface</h2>
+			<p>Type in your command here</p>
+			<input type="text" id="command-prompt" name="command-prompt">
+			<p>How long to turn the LED on for (maximum of 5 seconds)</p>
+			<input type="text" id="duration-prompt" name="duration-prompt">
+			<br></br>
+			<font color="blue"><p id="led-command-status">LED Status: Unused</p></font>
+			<br></br>
+			<button id="activateLEDButton" onclick="activateLED()">Send Command</button>
+		<div>
 	</body>
 </html>

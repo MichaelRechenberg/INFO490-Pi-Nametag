@@ -3,7 +3,7 @@ from flask import Flask, request, g
 from flask_cors import CORS
 
 from server.views.home_view import HomeView
-from server.views.led_api_view import TempLEDView
+from server.views.led_api_view import ActivateLEDView
 
 from led_control.led_controller import LEDController
 
@@ -16,8 +16,9 @@ CORS(app)
 # This should reflect the physical LED circuit
 #   attached to the nametag
 LED_MAPPING = {
-    'ls': 18,
-    'rm': 15
+    'whoami': 18,
+    'ls -l /home/mike/work': 15,
+    'sudo rm -rf /bad/vibes': 14
 }
 
 
@@ -31,9 +32,8 @@ def before_request_prepare():
     g.led_controller = led_controller
 
 
-# TODO: add API endpoints using Flask Views
 app.add_url_rule('/home', view_func=HomeView.as_view('home_view'))
-app.add_url_rule('/activateLED/<led_key>', view_func=TempLEDView.as_view('led_api_view'))
+app.add_url_rule('/activateLED', view_func=ActivateLEDView.as_view('led_api_view'))
 
 
 
