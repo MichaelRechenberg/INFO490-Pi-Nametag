@@ -51,12 +51,18 @@ class LEDController:
             # The key did not match any of the registered LED keys 
             return False
 
+        if self.led_is_active:
+            # Cannot turn on more than one LED at a time
+            return False
+
+        self.led_is_active = True
         GPIO.output(pin_number, GPIO.HIGH)
         # NOTE: time.sleep() halts the current thread.  Perhaps if we wanted 
         #   to return control to the caller faster, we could spawn a new thread
         #   to handle the LEDs
         time.sleep(duration)
         GPIO.output(pin_number, GPIO.LOW)
+        self.led_is_active = False
 
         return True
 
