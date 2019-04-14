@@ -12,6 +12,6 @@ to install the other dependencies
 
 # Running The Server
 
-Activate the pi-nametag conda environment, then navigate to the server/ directory.  Then run 
+Activate the pi-nametag conda environment, then navigate to the repo's root directory.  Then run 
 	python app.py
 to start the webserver
